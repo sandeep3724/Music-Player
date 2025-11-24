@@ -1,0 +1,1175 @@
+ /* MusicPlayer.css */
+
+
+/* ---------- Root / layout ---------- */
+:root{
+  --bg-1: #060712;
+  --bg-2: #071033;
+  --card: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.06);
+  --accent-1: #6366f1; /* indigo */
+  --accent-2: #ec4899; /* rose */
+  --muted: rgba(255,255,255,0.6);
+}
+
+.mp-root {
+  min-height: 100vh;
+  padding: 28px;
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(99,102,241,0.08), transparent 8%),
+              linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  color: #fff;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- Header ---------- */
+.mp-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+.mp-brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.mp-logo {
+  width:48px; height:48px;
+  display:grid; place-items:center;
+  background: linear-gradient(135deg,var(--accent-1),var(--accent-2));
+  border-radius:10px;
+  box-shadow: 0 10px 30px rgba(99,102,241,0.12), inset 0 -6px 18px rgba(0,0,0,0.2);
+  font-weight:700;
+  font-size:20px;
+}
+.mp-title { font-size:18px; font-weight:700; letter-spacing:0.2px; }
+.mp-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+
+/* controls in header */
+.mp-controls { display:flex; align-items:center; gap:12px; }
+.icon-btn {
+  width:42px; height:42px; border-radius:10px;
+  background: rgba(255,255,255,0.03); border:1px solid var(--glass-border);
+  display:grid; place-items:center; cursor:pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.icon-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.45); }
+
+.play-circle {
+  width:62px; height:62px; border-radius:16px;
+  display:grid; place-items:center; cursor:pointer;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  box-shadow: 0 12px 30px rgba(99,102,241,0.18), 0 2px 8px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: white;
+  transition: transform .15s ease;
+}
+.play-circle:hover { transform: scale(1.04); }
+
+/* small meta */
+.mp-meta { margin-left:10px; text-align:left; }
+.mp-current-title { font-weight:600; font-size:14px; }
+.mp-current-artist { font-size:12px; color:var(--muted); }
+
+/* ---------- Main layout ---------- */
+.mp-main {
+  display:grid;
+  grid-template-columns: 1fr 360px;
+  gap:22px;
+  align-items:start;
+}
+@media (max-width:980px){
+  .mp-main { grid-template-columns: 1fr; }
+}
+
+/* glass card base */
+.glass {
+  background: var(--card);
+  border-radius:16px;
+  padding:18px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+/* ---------- Player section ---------- */
+.mp-player { display:flex; flex-direction:column; gap:14px; }
+.mp-seeker .range {
+  -webkit-appearance:none; appearance:none;
+  width:100%; height:10px; border-radius:999px; background:linear-gradient(90deg, rgba(99,102,241,0.9), rgba(236,72,153,0.9));
+  box-shadow: 0 2px 12px rgba(99,102,241,0.06);
+  overflow: hidden;
+}
+/* make rail soft */
+.mp-seeker .range::-webkit-slider-runnable-track { height:10px; border-radius:999px; background: linear-gradient(90deg, rgba(99,102,241,0.2), rgba(236,72,153,0.2)); }
+.mp-seeker .range::-webkit-slider-thumb {
+  -webkit-appearance:none; width:18px; height:18px; border-radius:50%;
+  background: white; box-shadow: 0 6px 18px rgba(0,0,0,0.5), 0 0 10px rgba(99,102,241,0.12);
+  margin-top: -4px; transition: transform .12s ease;
+}
+.mp-seeker .range:active::-webkit-slider-thumb { transform: scale(1.06); }
+
+/* time labels */
+.mp-time { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-top:6px; }
+
+/* bottom controls */
+.mp-bottom { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.mp-left { display:flex; align-items:center; gap:12px; }
+.range.small { width:140px; height:6px; border-radius:8px; }
+.chip {
+  padding:6px 10px; border-radius:999px; font-size:13px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.03); cursor:pointer;
+  transition: transform .12s, background .12s;
+}
+.chip.active { background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color: #fff; transform: translateY(-2px); }
+
+/* equalizer */
+.eq { display:flex; gap:6px; align-items:end; height:22px; }
+.eq .bar {
+  display:inline-block; width:6px; background:linear-gradient(180deg,var(--accent-1),var(--accent-2));
+  border-radius:3px; transform-origin: bottom;
+  height:6px;
+}
+.eq-play .bar { animation: eqWave 900ms linear infinite; }
+.eq-play .bar:nth-child(1){ animation-duration:720ms; height:8px; }
+.eq-play .bar:nth-child(2){ animation-duration:860ms; height:14px; }
+.eq-play .bar:nth-child(3){ animation-duration:680ms; height:10px; }
+.eq-play .bar:nth-child(4){ animation-duration:920ms; height:12px; }
+@keyframes eqWave { 0% { transform: scaleY(.15) } 50% { transform: scaleY(1.05) } 100% { transform: scaleY(.15) } }
+
+/* ---------- Playlist ---------- */
+.mp-playlist { display:flex; flex-direction:column; gap:12px; max-height:72vh; overflow:auto; padding-bottom:8px; }
+.playlist-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.playlist-list { display:flex; flex-direction:column; gap:8px; }
+
+/* each row */
+.playlist-row {
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:10px; border-radius:10px; transition: transform .12s, background .12s;
+}
+.playlist-row:hover { transform: translateX(6px); background: rgba(255,255,255,0.02); }
+.playlist-row.active { background: linear-gradient(90deg, rgba(99,102,241,0.12), rgba(236,72,153,0.06)); border-left: 3px solid var(--accent-1); transform: scale(1.01); }
+
+.track-info { flex:1; min-width: 0; }
+.track-title { font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.track-artist { font-size:12px; color:var(--muted); margin-top:4px; }
+
+/* small action buttons */
+.track-actions { display:flex; gap:8px; align-items:center; }
+.small-btn {
+  width:36px; height:36px; border-radius:8px; display:grid; place-items:center; cursor:pointer;
+  background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.03);
+  transition: transform .12s, background .12s;
+}
+.small-btn.play { background: linear-gradient(135deg,var(--accent-1),var(--accent-2)); color:#fff; }
+.small-btn.stop { background: linear-gradient(135deg, #ef4444, #f97316); color:#fff; }
+.small-btn.remove { background: rgba(255,255,255,0.03); }
+.small-btn:hover { transform: translateY(-3px); }
+
+/* playlist footer */
+.playlist-footer { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:8px; }
+.file-label { display:inline-grid; grid-auto-flow:column; gap:8px; align-items:center; cursor:pointer; padding:8px 12px; border-radius:10px; background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.03); }
+.file-label input { display:none; }
+.small-muted { font-size:12px; color:var(--muted); }
+
+/* utility */
+.btn { padding:8px 12px; border-radius:10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.04); cursor:pointer; }
+
+
+/* ===========================
+   Dynamic background & buttons
+   Paste at the END of MusicPlayer.css
+   =========================== */
+
+/* --- background layers: drifting radial lights + diagonal gradient --- */
+.mp-root {
+  position: relative;
+  overflow: hidden;
+}
+
+/* floating radial lights using pseudo-elements */
+.mp-root::before,
+.mp-root::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.12;
+  mix-blend-mode: screen;
+  filter: blur(60px);
+  transform: translate3d(0,0,0);
+  animation: drift 14s linear infinite;
+}
+
+/* two different color blobs */
+.mp-root::before {
+  background-image: radial-gradient(circle at 20% 30%, rgba(99,102,241,0.95) 0%, rgba(99,102,241,0.35) 15%, transparent 40%);
+  top: -10%;
+  left: -10%;
+  animation-duration: 18s;
+}
+.mp-root::after {
+  background-image: radial-gradient(circle at 80% 70%, rgba(236,72,153,0.92) 0%, rgba(236,72,153,0.25) 12%, transparent 38%);
+  right: -10%;
+  bottom: -10%;
+  animation-duration: 26s;
+  animation-direction: reverse;
+}
+
+/* subtle diagonal gradient layer */
+.mp-root .mp-dynamic-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(120deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  animation: slideGradient 12s linear infinite;
+  opacity: 0.7;
+}
+
+/* drift / slide keyframes */
+@keyframes drift {
+  0%   { transform: translate3d(0,0,0) scale(1) rotate(0deg); }
+  50%  { transform: translate3d(6%, -4%, 0) scale(1.06) rotate(3deg); }
+  100% { transform: translate3d(0,0,0) scale(1) rotate(0deg); }
+}
+@keyframes slideGradient {
+  0% { background-position: -20% 0% }
+  50% { background-position: 120% 100% }
+  100% { background-position: -20% 0% }
+}
+
+/* ensure content stacks above animated backgrounds */
+.mp-header, .mp-main, .glass, .mp-playlist, .mp-player { position: relative; z-index: 2; }
+
+/* ---------- button dynamics ---------- */
+
+/* shared glow variables */
+:root {
+  --glow-acc: rgba(99,102,241,0.32);
+  --glow-hot: rgba(236,72,153,0.26);
+}
+
+/* animated gradient border for icon / small buttons */
+.icon-btn, .small-btn, .file-label, .btn {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+.icon-btn::before, .small-btn::before, .file-label::before, .btn::before{
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: -1;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00) 40%, rgba(255,255,255,0.02));
+  transition: opacity .28s ease, transform .28s ease;
+  opacity: 0;
+  transform-origin: left center;
+}
+.icon-btn:hover::before, .small-btn:hover::before, .file-label:hover::before, .btn:hover::before {
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+/* vibrant animated outline (on focus or hover) */
+.icon-btn:focus-visible, .small-btn:focus-visible, .btn:focus-visible, .file-label:focus-visible {
+  box-shadow: 0 6px 28px var(--glow-acc), 0 0 38px var(--glow-hot);
+  outline: none;
+}
+
+/* play-circle pulse when playing */
+.play-circle {
+  transition: transform .18s ease, box-shadow .18s ease;
+  will-change: transform;
+}
+.play-circle.is-playing {
+  animation: pulseGlow 1.6s infinite ease-in-out;
+  transform-origin: center;
+  box-shadow: 0 10px 30px rgba(99,102,241,0.14), 0 2px 8px rgba(236,72,153,0.06);
+}
+@keyframes pulseGlow {
+  0%   { transform: scale(1); box-shadow: 0 10px 30px rgba(99,102,241,0.10), 0 0 0 0 rgba(236,72,153,0.06); }
+  50%  { transform: scale(1.02); box-shadow: 0 18px 44px rgba(99,102,241,0.16), 0 0 34px rgba(236,72,153,0.08); }
+  100% { transform: scale(1); box-shadow: 0 10px 30px rgba(99,102,241,0.10), 0 0 0 0 rgba(236,72,153,0.06); }
+}
+
+/* play -> stop micro bounce */
+.play-circle:active { transform: translateY(1px) scale(0.99); }
+
+/* gradient glow for primary buttons (play, control) */
+.play-circle:hover, .small-btn.play:hover {
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* small buttons: animated gradient background on hover */
+.small-btn.play {
+  background-image: linear-gradient(90deg, rgba(99,102,241,0.95), rgba(236,72,153,0.95));
+  color: white;
+}
+.small-btn.play:hover {
+  filter: saturate(1.08) brightness(1.02);
+  box-shadow: 0 10px 30px rgba(99,102,241,0.14), 0 4px 12px rgba(236,72,153,0.06);
+}
+
+/* press ripple using scaled pseudo-element (works cross-browser) */
+.icon-btn::after, .small-btn::after, .btn::after, .file-label::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(255,255,255,0.12) 10%, transparent 44%);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity .28s ease, transform .28s ease;
+  pointer-events: none;
+}
+.icon-btn:active::after, .small-btn:active::after, .btn:active::after, .file-label:active::after {
+  opacity: 1;
+  transform: scale(1);
+  transition: none;
+}
+
+/* subtle hover skew + sheen on chips */
+.chip:hover {
+  transform: translateY(-3px) rotate(-0.6deg);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.5);
+}
+.chip.active {
+  background: linear-gradient(90deg, rgba(99,102,241,0.95), rgba(236,72,153,0.95));
+  color: white;
+}
+
+/* playlist-row micro-hover highlight */
+.playlist-row:hover { background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); transform: translateX(6px) scale(1.002); }
+
+/* small responsive tweak to preserve dynamics */
+@media (max-width:700px){
+  .mp-root::before, .mp-root::after { display: none; }
+  .mp-main { grid-template-columns: 1fr; }
+  .play-circle { width:56px; height:56px; }
+}
+
+
+/* ===========================
+    PLAYLIST & RANGE ENHANCEMENTS (Added for 'more better')
+    =========================== */
+
+/* --- Custom Scrollbar for Playlist --- */
+.mp-playlist::-webkit-scrollbar {
+  width: 8px;
+}
+.mp-playlist::-webkit-scrollbar-track {
+  background: transparent;
+}
+.mp-playlist::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+.mp-playlist::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Range Slider Thumb Glow/Focus Match --- */
+/* The main slider thumb style */
+.mp-seeker .range::-webkit-slider-thumb:focus-visible,
+.mp-seeker .range:active::-webkit-slider-thumb {
+    /* Inherit vibrant animated outline from other elements (for consistency) */
+    box-shadow: 0 0 0 2px var(--bg-1), /* Inner dark border */
+                0 0 0 4px var(--accent-1), /* Primary accent ring */
+                0 0 10px rgba(99,102,241,0.5),
+                0 0 16px rgba(236,72,153,0.3);
+    transform: scale(1.08); /* Slightly larger on active/focus */
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+
+/* Volume slider thumb style */
+.range.small::-webkit-slider-thumb {
+    width: 14px;
+    height: 14px;
+    margin-top: -4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5), 0 0 6px rgba(99,102,241,0.08);
+}
+.range.small::-webkit-slider-thumb:focus-visible,
+.range.small:active::-webkit-slider-thumb {
+    box-shadow: 0 0 0 2px var(--bg-1),
+                0 0 0 3px var(--accent-1);
+    transform: scale(1.15);
+}
+
+/* --- Volume icon button tweak --- */
+.mp-left .icon-btn.vol-icon {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+}
+
+
+/* --- Playlist Row UX --- */
+.track-info {
+    /* Make the track info section clearly clickable */
+    cursor: pointer;
+    display: flex; /* To align index and meta */
+    gap: 10px;
+}
+.track-index {
+    font-size: 14px;
+    color: var(--muted);
+    font-weight: 500;
+}
+.track-meta {
+    min-width: 0;
+}
+.playlist-row.active .track-index {
+    color: var(--accent-1);
+}
+
+/* --- Shuffle/Loop Chip Active Tweak --- */
+/* Ensure active chip colors are strong and consistent */
+.chip.active {
+    background: linear-gradient(90deg, var(--accent-1) 10%, var(--accent-2) 90%);
+    color: white;
+    border: 1px solid var(--accent-1); /* Stronger border for active state */
+}
+
+/* Remove button better contrast */
+.small-btn.remove:hover {
+    background: rgba(239, 68, 68, 0.15); /* Reddish hover for remove */
+    color: #ef4444; /* Red icon on hover */
+    transform: translateY(-2px);
+}
+
+/* Small improvement to the logo/branding section */
+.mp-logo {
+    box-shadow: 0 10px 30px rgba(99,102,241,0.18), inset 0 -6px 18px rgba(0,0,0,0.3),
+                0 0 12px rgba(99,102,241,0.3); /* Add more glow */
+}
+
+
+/* PREMIUM MUSIC PLAYER THEME: ENHANCED DYNAMICS */
+
+/* ---------- Root / layout ---------- */
+:root{
+  --bg-1: #060712;
+  --bg-2: #071033;
+  --card: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.06);
+  --accent-1: #6366f1; /* indigo */
+  --accent-2: #ec4899; /* rose */
+  --muted: rgba(255,255,255,0.6);
+
+  /* Dynamic variables */
+  --glow-acc: rgba(99,102,241,0.32);
+  --glow-hot: rgba(236,72,153,0.26);
+  --shine-color: rgba(255,255,255,0.15);
+}
+
+.mp-root {
+  min-height: 100vh;
+  padding: 28px;
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(99,102,241,0.08), transparent 8%),
+              linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  color: #fff;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background Layers (retained) */
+.mp-root::before,
+.mp-root::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.12;
+  mix-blend-mode: screen;
+  filter: blur(60px);
+  transform: translate3d(0,0,0);
+  animation: drift 14s linear infinite;
+}
+.mp-root::before {
+  background-image: radial-gradient(circle at 20% 30%, rgba(99,102,241,0.95) 0%, rgba(99,102,241,0.35) 15%, transparent 40%);
+  top: -10%; left: -10%; animation-duration: 18s;
+}
+.mp-root::after {
+  background-image: radial-gradient(circle at 80% 70%, rgba(236,72,153,0.92) 0%, rgba(236,72,153,0.25) 12%, transparent 38%);
+  right: -10%; bottom: -10%; animation-duration: 26s; animation-direction: reverse;
+}
+
+@keyframes eqWave { 
+    0% { transform: scaleY(.15) } 
+    50% { transform: scaleY(1.05) } 
+    100% { transform: scaleY(.15) } 
+}
+
+/* Ensure content stacks above animated backgrounds */
+.mp-header, .mp-main, .glass { position: relative; z-index: 2; }
+
+
+/* ---------- Header & Controls (Base Styles) ---------- */
+.mp-header { display:flex; justify-content:space-between; align-items:center; gap:20px; }
+.mp-brand { display:flex; align-items:center; gap:12px; }
+.mp-logo {
+  width:48px; height:48px; display:grid; place-items:center;
+  background: linear-gradient(135deg,var(--accent-1),var(--accent-2));
+  border-radius:10px; font-weight:700; font-size:20px;
+  /* Enhanced logo glow */
+  box-shadow: 0 10px 30px rgba(99,102,241,0.25), inset 0 -6px 18px rgba(0,0,0,0.4);
+}
+.mp-controls { display:flex; align-items:center; gap:12px; }
+
+/* -------------------------------------------
+   DYNAMIC STYLE 1: ICON BUTTONS (Gradient Flow + Press)
+   Applies to: .icon-btn, .file-label
+   ------------------------------------------- */
+.icon-btn, .file-label {
+  width:42px; height:42px; border-radius:10px;
+  background: rgba(255,255,255,0.03); border:1px solid var(--glass-border);
+  display:grid; place-items:center; cursor:pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+  position: relative; z-index: 2; overflow: hidden;
+  will-change: transform;
+}
+.file-label { width: auto; height: auto; padding:8px 12px; }
+
+.icon-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+
+/* Gradient Flow Effect (Dynamic Style 1a) */
+.icon-btn::before, .file-label::before {
+  content: "";
+  position: absolute;
+  inset: -100%;
+  z-index: 0;
+  background: linear-gradient(90deg, transparent, var(--shine-color), transparent);
+  transform: rotate(45deg);
+  animation: shine 4s infinite linear;
+  opacity: 0.8;
+  pointer-events: none;
+}
+@keyframes shine {
+  0% { transform: translate(-100%, -100%) rotate(45deg); }
+  100% { transform: translate(100%, 100%) rotate(45deg); }
+}
+
+/* Pressed Ripple Effect (Dynamic Style 1b) - also used for small-btn */
+.icon-btn:active, .file-label:active {
+  transform: scale(0.95);
+  transition: transform .1s ease;
+}
+.icon-btn::after, .file-label::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle, rgba(255,255,255,0.25) 10%, transparent 40%);
+  opacity: 0;
+  transform: scale(0.1);
+  transition: opacity .3s ease, transform .3s ease;
+  pointer-events: none;
+}
+.icon-btn:active::after, .file-label:active::after {
+  opacity: 1;
+  transform: scale(1.5);
+  transition: none; /* Instant scale up on press */
+}
+
+/* --- Volume icon button tweak --- */
+.mp-left .icon-btn.vol-icon { width: 36px; height: 36px; padding: 0; }
+.file-label input { display:none; }
+
+
+/* -------------------------------------------
+   DYNAMIC STYLE 2: PLAY BUTTON (Pulse Glow)
+   ------------------------------------------- */
+.play-circle {
+  width:62px; height:62px; border-radius:16px;
+  display:grid; place-items:center; cursor:pointer;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  box-shadow: 0 12px 30px rgba(99,102,241,0.18), 0 2px 8px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: white;
+  transition: transform .15s ease, box-shadow .15s ease;
+  will-change: transform, box-shadow;
+}
+.play-circle:hover { transform: scale(1.04); }
+.play-circle:active { transform: translateY(1px) scale(0.99); transition: transform .05s ease; }
+
+/* Pulse Glow (Dynamic Style 2) */
+.play-circle.is-playing {
+  animation: pulseGlow 1.8s infinite ease-in-out;
+  box-shadow: 0 0 0 0 rgba(99,102,241,0.2), 0 0 0 0 rgba(236,72,153,0.1);
+}
+
+@keyframes eqWave { 
+    0% { transform: scaleY(.15) } 
+    50% { transform: scaleY(1.05) } 
+    100% { transform: scaleY(.15) } 
+}
+
+
+/* -------------------------------------------
+   DYNAMIC STYLE 3: CHIPS (Active Neon Glow + Skew)
+   ------------------------------------------- */
+.chip {
+  padding:6px 10px; border-radius:999px; font-size:13px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.03); cursor:pointer;
+  transition: all .2s ease;
+  will-change: transform, box-shadow;
+}
+.chip:hover { transform: translateY(-3px) rotate(-0.6deg); box-shadow: 0 10px 28px rgba(0,0,0,0.5); }
+
+/* Neon Glow (Dynamic Style 3) */
+.chip.active {
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  color: #fff;
+  transform: translateY(-2px);
+  /* Stronger neon glow for active state */
+  box-shadow: 0 0 15px var(--accent-1), 0 0 25px var(--accent-2), inset 0 0 6px rgba(255,255,255,0.5);
+  border-color: var(--accent-1);
+}
+.chip:active { transform: translateY(1px) scale(0.98); }
+
+
+/* -------------------------------------------
+   DYNAMIC STYLE 4: SMALL BUTTONS (Hover Animation + Press)
+   Applies to: .small-btn
+   ------------------------------------------- */
+.small-btn {
+  width:36px; height:36px; border-radius:8px; display:grid; place-items:center; cursor:pointer;
+  background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.03);
+  transition: transform .2s, background .2s;
+  position: relative; z-index: 2; overflow: hidden;
+}
+.small-btn:hover { transform: translateY(-3px); }
+
+/* Play/Pause Button - Hover Animation */
+.small-btn.play {
+  background: linear-gradient(135deg,var(--accent-1),var(--accent-2)); color:#fff;
+  transition: transform .2s, box-shadow .2s;
+}
+.small-btn.play:hover {
+  filter: saturate(1.1);
+  box-shadow: 0 10px 30px rgba(99,102,241,0.2), 0 4px 12px rgba(236,72,153,0.1);
+}
+
+/* Remove Button - Color Change */
+.small-btn.remove:hover {
+  background: rgba(239, 68, 68, 0.15); /* Soft red hover */
+  color: #ef4444; /* Red icon on hover */
+  transform: translateY(-2px);
+}
+
+/* Re-use Pressed Ripple from Dynamic Style 1b */
+.small-btn:active { transform: scale(0.95); transition: transform .05s ease; }
+
+
+/* -------------------------------------------
+   Range Slider Dynamics (Consistent Glow/Active)
+   ------------------------------------------- */
+.mp-seeker .range {
+  -webkit-appearance:none; appearance:none;
+  width:100%; height:10px; border-radius:999px; background:linear-gradient(90deg, rgba(99,102,241,0.9), rgba(236,72,153,0.9));
+  box-shadow: 0 2px 12px rgba(99,102,241,0.06);
+  overflow: hidden;
+}
+.mp-seeker .range::-webkit-slider-thumb {
+  -webkit-appearance:none; width:18px; height:18px; border-radius:50%;
+  background: white;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5), 0 0 10px rgba(99,102,241,0.12);
+  margin-top: -4px; transition: transform .12s ease;
+}
+
+/* Active/Focus Glow */
+.mp-seeker .range::-webkit-slider-thumb:focus-visible,
+.mp-seeker .range:active::-webkit-slider-thumb {
+  box-shadow: 0 0 0 2px var(--bg-1),
+              0 0 0 4px var(--accent-1),
+              0 0 16px var(--glow-acc);
+  transform: scale(1.08);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+/* Volume Slider */
+.range.small { width:140px; height:6px; border-radius:8px; }
+.range.small::-webkit-slider-thumb {
+  width: 14px; height: 14px; margin-top: -4px;
+}
+.range.small::-webkit-slider-thumb:focus-visible,
+.range.small:active::-webkit-slider-thumb {
+  box-shadow: 0 0 0 2px var(--bg-1),
+              0 0 0 3px var(--accent-1);
+  transform: scale(1.15);
+}
+
+/* Equalizer (retained) */
+.eq { display:flex; gap:6px; align-items:end; height:22px; }
+.eq .bar {
+  display:inline-block; width:6px; background:linear-gradient(180deg,var(--accent-1),var(--accent-2));
+  border-radius:3px; transform-origin: bottom; height:6px;
+}
+.eq-play .bar { animation: eqWave 900ms linear infinite; }
+@keyframes eqWave { 0% { transform: scaleY(.15) } 50% { transform: scaleY(1.05) } 100% { transform: scaleY(.15) } }
+
+/* Playlist Row Dynamics */
+.playlist-row:hover {
+  background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  transform: translateX(6px) scale(1.002);
+}
+.playlist-row.active {
+  background: linear-gradient(90deg, rgba(99,102,241,0.15), rgba(236,72,153,0.06));
+  border-left: 3px solid var(--accent-1);
+  transform: scale(1.01);
+  /* Added subtle active glow */
+  box-shadow: 0 0 10px rgba(99,102,241,0.15);
+}
+
+/* Playlist UX/Scrollbar (retained) */
+.mp-playlist::-webkit-scrollbar { width: 8px; }
+.mp-playlist::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 999px; }
+.track-info { cursor: pointer; display: flex; gap: 10px; }
+.track-index { font-size: 14px; color: var(--muted); font-weight: 500; }
+.playlist-row.active .track-index { color: var(--accent-1); }
+
+/* Responsive tweaks (retained) */
+@media (max-width:700px){
+  .mp-root::before, .mp-root::after { display: none; }
+  .mp-main { grid-template-columns: 1fr; }
+  .play-circle { width:56px; height:56px; }
+}
+
+
+/* PREMIUM MUSIC PLAYER THEME: DYNAMIC COLORING */
+
+/* ---------- Root / layout ---------- */
+:root{
+  --bg-1: #060712;
+  --bg-2: #071033;
+  --card: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.06);
+
+  /* DYNAMIC COLORS: These will be overwritten by React based on current track */
+  --dynamic-primary: #6366f1; /* Fallback: Indigo */
+  --dynamic-secondary: #8588f4; /* Fallback: Lighter Indigo */
+  
+  --muted: rgba(255,255,255,0.6);
+
+  /* Dynamic variables */
+  --glow-acc: var(--dynamic-primary); /* Use primary for general glow */
+  --glow-hot: var(--dynamic-secondary); /* Use secondary for highlights */
+  --shine-color: rgba(255,255,255,0.15);
+}
+
+.mp-root {
+  min-height: 100vh;
+  padding: 28px;
+  /* Use dynamic primary color for the background flare */
+  background: radial-gradient(1200px 600px at 10% 10%, var(--dynamic-primary, rgba(99,102,241,0.08)), transparent 8%),
+              linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  color: #fff;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background Layers (adjusting to use dynamic colors) */
+.mp-root::before,
+.mp-root::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.12;
+  mix-blend-mode: screen;
+  filter: blur(60px);
+  transform: translate3d(0,0,0);
+  animation: drift 14s linear infinite;
+}
+.mp-root::before {
+  /* Dynamic primary color blob */
+  background-image: radial-gradient(circle at 20% 30%, var(--dynamic-primary, rgba(99,102,241,0.95)) 0%, var(--dynamic-primary, rgba(99,102,241,0.35)) 15%, transparent 40%);
+  top: -10%; left: -10%; animation-duration: 18s;
+}
+.mp-root::after {
+  /* Dynamic secondary color blob */
+  background-image: radial-gradient(circle at 80% 70%, var(--dynamic-secondary, rgba(236,72,153,0.92)) 0%, var(--dynamic-secondary, rgba(236,72,153,0.25)) 12%, transparent 38%);
+  right: -10%; bottom: -10%; animation-duration: 26s; animation-direction: reverse;
+}
+
+@keyframes eqWave { 
+    0% { transform: scaleY(.15) } 
+    50% { transform: scaleY(1.05) } 
+    100% { transform: scaleY(.15) } 
+}
+
+/* Ensure content stacks above animated backgrounds */
+.mp-header, .mp-main, .glass { position: relative; z-index: 2; }
+
+
+/* ---------- Header & Controls (Dynamic Gradient) ---------- */
+.mp-header { display:flex; justify-content:space-between; align-items:center; gap:20px; }
+.mp-brand { display:flex; align-items:center; gap:12px; }
+.mp-logo {
+  /* Use dynamic colors for the logo background */
+  background: linear-gradient(135deg, var(--dynamic-primary), var(--dynamic-secondary));
+  box-shadow: 0 10px 30px var(--dynamic-primary, rgba(99,102,241,0.25)), inset 0 -6px 18px rgba(0,0,0,0.4);
+}
+.mp-controls { display:flex; align-items:center; gap:12px; }
+
+/* DYNAMIC STYLE 2: PLAY BUTTON (Pulse Glow) */
+.play-circle {
+  /* Use dynamic colors for the play button background */
+  background: linear-gradient(135deg, var(--dynamic-primary), var(--dynamic-secondary));
+  box-shadow: 0 12px 30px var(--dynamic-primary, rgba(99,102,241,0.18)), 0 2px 8px rgba(0,0,0,0.6);
+  /* ... (rest of play-circle styles) ... */
+}
+/* Pulse Glow (Dynamic Style 2) - using dynamic colors for the shadow effect */
+.play-circle.is-playing {
+  animation: pulseGlow 1.8s infinite ease-in-out;
+  box-shadow: 0 0 0 0 var(--dynamic-primary), 0 0 0 0 var(--dynamic-secondary);
+}
+
+@keyframes eqWave { 
+    0% { transform: scaleY(.15) } 
+    50% { transform: scaleY(1.05) } 
+    100% { transform: scaleY(.15) } 
+}
+
+/* ---------- Player section (Seeker & Equalizer) ---------- */
+.mp-seeker .range {
+  /* Use dynamic colors for the seek bar progress fill */
+  background: linear-gradient(90deg, var(--dynamic-primary, rgba(99,102,241,0.9)), var(--dynamic-secondary, rgba(236,72,153,0.9)));
+  box-shadow: 0 2px 12px var(--dynamic-primary, rgba(99,102,241,0.06));
+}
+.mp-seeker .range::-webkit-slider-runnable-track {
+  /* Use dynamic colors for the seek bar rail */
+  background: linear-gradient(90deg, rgba(var(--dynamic-primary),0.2), rgba(var(--dynamic-secondary),0.2));
+}
+.mp-seeker .range::-webkit-slider-thumb {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5), 0 0 10px var(--dynamic-primary, rgba(99,102,241,0.12));
+}
+
+/* Equalizer */
+.eq .bar {
+  /* Use dynamic colors for the equalizer bars */
+  background: linear-gradient(180deg, var(--dynamic-primary), var(--dynamic-secondary));
+}
+
+
+/* -------------------------------------------
+   DYNAMIC STYLE 3: CHIPS (Active Neon Glow + Skew)
+   ------------------------------------------- */
+.chip.active {
+  /* Use dynamic colors for the active chip background and glow */
+  background: linear-gradient(90deg, var(--dynamic-primary), var(--dynamic-secondary));
+  border-color: var(--dynamic-primary);
+  box-shadow: 0 0 15px var(--dynamic-primary), 0 0 25px var(--dynamic-secondary), inset 0 0 6px rgba(255,255,255,0.5);
+}
+
+/* -------------------------------------------
+   DYNAMIC STYLE 4: SMALL BUTTONS
+   ------------------------------------------- */
+/* Play/Pause Button - Hover Animation */
+.small-btn.play {
+  /* Use dynamic colors for playlist play button */
+  background: linear-gradient(135deg, var(--dynamic-primary), var(--dynamic-secondary));
+}
+.small-btn.play:hover {
+  box-shadow: 0 10px 30px var(--dynamic-primary, rgba(99,102,241,0.2)), 0 4px 12px var(--dynamic-secondary, rgba(236,72,153,0.1));
+}
+
+
+/* ---------- Playlist Row Dynamics (Per-Row Dynamic Accent) ---------- */
+.playlist-row.active {
+  /* Use the per-row CSS variable set in React (for active row highlight) */
+  border-left: 3px solid var(--row-accent);
+  background: linear-gradient(90deg, var(--row-accent, rgba(99,102,241,0.15)), rgba(var(--row-accent), 0.06));
+  box-shadow: 0 0 10px rgba(var(--row-accent),0.15);
+}
+.playlist-row.active .track-index {
+  color: var(--row-accent);
+}
+
+/* -------------------------------------------
+   Dynamic Slider Thumb Glow (Focus)
+   ------------------------------------------- */
+.mp-seeker .range::-webkit-slider-thumb:focus-visible,
+.mp-seeker .range:active::-webkit-slider-thumb {
+  box-shadow: 0 0 0 2px var(--bg-1),
+              0 0 0 4px var(--dynamic-primary),
+              0 0 16px var(--dynamic-primary);
+}
+.range.small::-webkit-slider-thumb:focus-visible,
+.range.small:active::-webkit-slider-thumb {
+  box-shadow: 0 0 0 2px var(--bg-1),
+              0 0 0 3px var(--dynamic-primary);
+}
+
+
+/* PREMIUM MUSIC PLAYER THEME: KINETIC & INTERACTIVE DYNAMICS */
+
+/* ---------- Root / Global Variables ---------- */
+:root {
+  --bg-1: #060712;
+  --bg-2: #071033;
+  --card: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.06);
+
+  /* DYNAMIC COLORS (Overwritten by React) */
+  --dynamic-primary: #6366f1; /* Fallback: Indigo */
+  --dynamic-secondary: #8588f4; /* Fallback: Lighter Indigo */
+
+  --muted: rgba(255, 255, 255, 0.6);
+  --shine-color: rgba(255, 255, 255, 0.15);
+}
+
+.mp-root {
+  min-height: 100vh;
+  padding: 28px;
+  /* Reduced background complexity to let header handle the main dynamism */
+  background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+  color: #fff;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+  /* Optimization for CSS animations */
+  will-change: background;
+}
+
+/* KINETIC HEADER GLOW EFFECT */
+.mp-root::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px; /* Only affect the top of the screen */
+  z-index: 0;
+  pointer-events: none;
+  /* Use a conic gradient rotating to create a pulsating, kinetic color wash */
+  background: conic-gradient(from 180deg at 50% 10%, 
+    transparent 0%, 
+    var(--dynamic-primary) 5%, 
+    var(--dynamic-secondary) 15%, 
+    transparent 35%);
+  opacity: 0.15;
+  filter: blur(80px);
+  animation: rotateGlow 30s linear infinite;
+}
+@keyframes rotateGlow {
+  to { transform: rotate(360deg); }
+}
+
+/* Ensure content stacks above animated backgrounds */
+.mp-header, .mp-main, .glass { position: relative; z-index: 2; }
+
+
+/* -------------------------------------------
+   INTERACTIVE GLASS EFFECT (Shimmer on Hover)
+   Applies to: .glass (mp-player, mp-playlist)
+   ------------------------------------------- */
+.glass {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow 0.3s ease;
+}
+
+.glass::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Parallax background layer */
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+    rgba(255, 255, 255, 0.08) 0%, 
+    transparent 30%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.glass:hover::before {
+  opacity: 1; /* Fade in the shimmering radial gradient on hover */
+}
+
+/* Playlist scrollbar needs adjustment for the interactive effect */
+.mp-playlist {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 72vh;
+  /* Prevent interaction logic from conflicting with scroll */
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-bottom: 8px;
+}
+
+/* --- JavaScript requirement: You'd need to add a mousemove listener in React to update --mouse-x/y on the .glass elements for true parallax. --- */
+
+
+/* ---------- Header & Logo ---------- */
+.mp-logo {
+  /* Use dynamic colors for the logo background */
+  background: linear-gradient(135deg, var(--dynamic-primary), var(--dynamic-secondary));
+  box-shadow: 0 10px 30px var(--dynamic-primary), inset 0 -6px 18px rgba(0, 0, 0, 0.4);
+}
+
+
+/* -------------------------------------------
+   DYNAMIC STYLE 2: PLAY BUTTON (Dynamic Pulse Glow)
+   ------------------------------------------- */
+.play-circle {
+  background: linear-gradient(135deg, var(--dynamic-primary), var(--dynamic-secondary));
+}
+.play-circle.is-playing {
+  animation: pulseGlow 1.8s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 var(--dynamic-primary), 0 0 0 0 var(--dynamic-secondary); }
+  100% { box-shadow: 0 0 20px var(--dynamic-primary), 0 0 30px var(--dynamic-secondary); }
+}
+
+/* -------------------------------------------
+   DYNAMIC STYLE 3: CHIPS (Active Neon Glow)
+   ------------------------------------------- */
+.chip { transition: all .2s ease; }
+.chip.active {
+  background: linear-gradient(90deg, var(--dynamic-primary), var(--dynamic-secondary));
+  border-color: var(--dynamic-primary);
+  /* Pulsating neon glow for a non-static "active" state */
+  box-shadow: 0 0 8px var(--dynamic-primary), 0 0 16px var(--dynamic-secondary), inset 0 0 4px rgba(255, 255, 255, 0.5);
+  animation: neonPulse 1.5s infinite alternate;
+}
+@keyframes neonPulse {
+  0% { opacity: 0.9; transform: translateY(-2px); }
+  100% { opacity: 1; transform: translateY(-3px); }
+}
+
+
+/* -------------------------------------------
+   Player Section (Seeker & Equalizer)
+   ------------------------------------------- */
+.mp-seeker .range {
+  background: linear-gradient(90deg, var(--dynamic-primary), var(--dynamic-secondary));
+  box-shadow: 0 2px 12px var(--dynamic-primary);
+}
+.mp-seeker .range::-webkit-slider-runnable-track {
+  background: linear-gradient(90deg, var(--dynamic-primary) 20%, var(--dynamic-secondary) 80%);
+  opacity: 0.2;
+}
+.eq .bar {
+  background: linear-gradient(180deg, var(--dynamic-primary), var(--dynamic-secondary));
+}
+
+
+/* -------------------------------------------
+   ACTIVE TRACK SPOTLIGHT (Luminous Border)
+   ------------------------------------------- */
+.playlist-row {
+  position: relative;
+  overflow: hidden;
+}
+.playlist-row:hover {
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateX(6px) scale(1.005);
+}
+
+.playlist-row.active {
+  /* Set border and background using the track's specific color */
+  border-left: 3px solid var(--row-accent);
+  background: linear-gradient(90deg, var(--row-accent) 0.1%, rgba(0, 0, 0, 0.0) 20%);
+  transform: scale(1.01);
+}
+
+/* Luminous Border Effect for Active Track */
+.playlist-row.active::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 10px;
+    border: 1px solid var(--row-accent);
+    opacity: 0;
+    /* Create a pulsing shadow border */
+    box-shadow: 0 0 6px var(--row-accent), 0 0 12px var(--row-accent);
+    animation: luminousBorder 2s infinite alternate ease-in-out;
+}
+@keyframes luminousBorder {
+    0% { opacity: 0.2; transform: scale(1); }
+    100% { opacity: 0.6; transform: scale(1.01); }
+}
+
+/* Small Buttons (Play/Stop) */
+.small-btn.play {
+  background: linear-gradient(135deg, var(--dynamic-primary), var(--dynamic-secondary));
+}
+.small-btn.play:hover {
+  box-shadow: 0 10px 30px var(--dynamic-primary, rgba(99,102,241,0.2)), 0 4px 12px var(--dynamic-secondary, rgba(236,72,153,0.1));
+}
+
+
+/* --- Remaining Styles (Not fundamentally changed) --- */
+.mp-header { display:flex; justify-content:space-between; align-items:center; gap:20px; }
+.mp-brand { display:flex; align-items:center; gap:12px; }
+.mp-title { font-size:18px; font-weight:700; letter-spacing:0.2px; }
+.mp-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+.mp-controls { display:flex; align-items:center; gap:12px; }
+.icon-btn { width:42px; height:42px; border-radius:10px; background: rgba(255,255,255,0.03); border:1px solid var(--glass-border); display:grid; place-items:center; cursor:pointer; transition: transform .15s ease, box-shadow .15s ease; position: relative; z-index: 2; overflow: hidden; }
+.icon-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+.mp-meta { margin-left:10px; text-align:left; }
+.mp-main { display:grid; grid-template-columns: 1fr 360px; gap:22px; align-items:start; }
+@media (max-width:980px){ .mp-main { grid-template-columns: 1fr; } }
+.mp-seeker .range::-webkit-slider-thumb { -webkit-appearance:none; width:18px; height:18px; border-radius:50%; background: white; margin-top: -4px; transition: transform .12s ease; }
+.mp-time { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-top:6px; }
+.mp-bottom { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.mp-left { display:flex; align-items:center; gap:12px; }
+.range.small { width:140px; height:6px; border-radius:8px; }
+.mp-playlist::-webkit-scrollbar { width: 8px; }
+.mp-playlist::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 999px; }
+.track-info { cursor: pointer; display: flex; gap: 10px; flex: 1; min-width: 0; }
+.track-index { font-size: 14px; color: var(--muted); font-weight: 500; }
+.track-meta { min-width: 0; }
+.track-title { font-weight:600; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.track-artist { font-size:12px; color:var(--muted); margin-top:4px; }
+.track-actions { display:flex; gap:8px; align-items:center; }
+.small-btn { width:36px; height:36px; border-radius:8px; display:grid; place-items:center; cursor:pointer; background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.03); transition: transform .2s, background .2s; position: relative; z-index: 2; overflow: hidden; }
+.small-btn.remove:hover { background: rgba(239, 68, 68, 0.15); color: #ef4444; transform: translateY(-2px); }
+.playlist-footer { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:8px; }
+.file-label { height: auto; padding:8px 12px; display:inline-grid; grid-auto-flow:column; gap:8px; align-items:center; cursor:pointer; border-radius:10px; background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.03); position: relative; z-index: 2; overflow: hidden; }
+.file-label input { display:none; }
+.small-muted { font-size:12px; color:var(--muted); }
+
+.small-btn.disabled { opacity: 0.45; pointer-events: none; cursor: default; }
+.missing-note { font-size: 12px; color: rgba(255,255,255,0.6); margin-left:6px; }

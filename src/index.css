@@ -1,0 +1,62 @@
+/* --- Premium player custom styles --- */
+
+/* range track & thumb styling (modern browsers) */
+input[type="range"].custom-range {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+input[type="range"].custom-range::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(99,102,241,0.9), rgba(236,72,153,0.9));
+  opacity: 0.22;
+}
+input[type="range"].custom-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  margin-top: -4px;
+  transition: transform 120ms ease;
+}
+input[type="range"].custom-range:active::-webkit-slider-thumb { transform: scale(1.08); }
+input[type="range"].custom-range::-moz-range-track {
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(99,102,241,0.9), rgba(236,72,153,0.9));
+  opacity: 0.22;
+}
+input[type="range"].custom-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* subtle shimmer on highlighted playlist item */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.playlist-highlight {
+  background-image: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  background-size: 200% 100%;
+  animation: shimmer 4s linear infinite;
+}
+
+/* nicer focus outlines for keyboard users */
+:focus { outline: none; }
+button:focus-visible, input:focus-visible {
+  outline: 2px solid rgba(99,102,241,0.6);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* small responsive tweaks */
+@media (max-width: 768px) {
+  .w-72 { height: 16rem; }
+}
